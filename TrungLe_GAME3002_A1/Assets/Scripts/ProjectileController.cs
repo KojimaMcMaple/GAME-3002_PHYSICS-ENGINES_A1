@@ -6,14 +6,12 @@ public class ProjectileController : MonoBehaviour
 {
     [SerializeField]
     private Vector3 impulse_dir = Vector3.zero;
-    [SerializeField]
-    private float impulse_multiplier = 0.0f;
+    
+    
     [SerializeField]
     private bool has_attempted_impulse = false;
-    [SerializeField]
-    private Vector3 ground_parallel_dir = Vector3.zero;
-    [SerializeField]
-    private float launch_angle = 0.0f;
+   
+    
     [SerializeField]
     private float jump_input = 0.0f;
     [SerializeField]
@@ -21,6 +19,10 @@ public class ProjectileController : MonoBehaviour
 
     private Rigidbody rb = null;
     private Collider projectile_collider = null;
+
+    public float impulse_multiplier = 0.0f;
+    public Vector3 ground_parallel_dir = Vector3.zero;
+    public float launch_angle = 0.0f;
 
     // Start is called before the first frame update
     private void Start()
