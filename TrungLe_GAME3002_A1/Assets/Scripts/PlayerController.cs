@@ -38,9 +38,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private int y_max_limit2 = -10;
 
+    private UIController ui_interface = null;
+
     // Start is called before the first frame update
     public void Start()
     {
+        ui_interface = GetComponent<UIController>();
+
+        if (ui_interface != null)
+        {
+            ui_interface.OnRequestUpdateUI(ProjectileController.launch_angle, ProjectileController.impulse_multiplier);
+        }
+
         Vector3 angles = orbiting_obj.eulerAngles;
         x_movement = angles.y;
         y_movement = angles.x;
@@ -55,17 +64,16 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // ADJUST ANGLE
-        y_movement2 += Input.GetAxis("Vertical2") * y_speed * 0.02f;
-
-        y_movement2 = ClampAngle(y_movement2, y_min_limit2, y_max_limit2);
-
-        Quaternion rotation = Quaternion.Euler(y_movement2, 0.0f, 0.0f);
-
-        look_at_target.rotation = new Quaternion(rotation.x, look_at_target.rotation.y, look_at_target.rotation.z, look_at_target.rotation.w);
+       
 
         // ADJUST STRENGTH
         x_movement2 = Input.GetAxis("Horizontal2");
+        ProjectileController.impulse_multiplier += x_movement2;
+
+        if (ui_interface != null)
+        {
+            ui_interface.OnRequestUpdateUI(ProjectileController.launch_angle, ProjectileController.impulse_multiplier);
+        }
     }
 
     public void LateUpdate()
@@ -86,6 +94,16 @@ public class PlayerController : MonoBehaviour
 
             orbiting_obj.rotation = rotation;
             orbiting_obj.position = position;
+
+
+            // ADJUST ANGLE
+            y_movement2 += Input.GetAxis("Vertical2") * y_speed * 0.02f;
+
+            y_movement2 = ClampAngle(y_movement2, y_min_limit2, y_max_limit2);
+
+            Quaternion rotation2 = Quaternion.Euler(y_movement2, -x_movement, 0.0f);
+
+            look_at_target.rotation = rotation2;
         }
     }
 
